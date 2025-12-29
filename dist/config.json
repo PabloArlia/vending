@@ -1,0 +1,19 @@
+{
+  "serial": {
+    "port": "COM3",
+    "baudrate": 9600,
+    "bytesize": 8,
+    "parity": "N",
+    "stopbits": 1,
+    "timeout": 1
+  },
+  "commands": {
+    "status": "A01\r"
+  },
+  "responses": {
+    "E00": "Todo bien",
+    "E01": "Falla de energía",
+    "E02": "No cayó",
+    "E03": "Agotado"
+  }
+}
