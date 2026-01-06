@@ -11,9 +11,9 @@
     "status": "A01\r"
   },
   "responses": {
-    "E00": "Todo bien",
-    "E01": "Falla de energía",
-    "E02": "No cayó",
-    "E03": "Agotado"
+    "E00": "¡GENIAL! RETIRÁ TU VALIJA<br/> DEL CONTENEDOR...",
+    "E01": "FALLA DE ENERGÍA",
+    "E02": "NO CAYÓ",
+    "E03": "AGOTADO"
   }
 }

@@ -3,6 +3,10 @@ import os
 import json
 import serial
 import time
+import threading
+import webview
+import pkgutil
+from importlib import resources
 
 
 def base_path():
@@ -10,13 +14,61 @@ def base_path():
         return os.path.dirname(sys.executable)
     return os.path.dirname(os.path.abspath(__file__))
 
-
 def salir(msg, code=0):
     print(msg)
     input("\nPresione ENTER para salir...")
     sys.exit(code)
 
+def init_serial():
+    global ser
+    ser_cfg = cfg["serial"]
 
+    print(f"Abriendo puerto {ser_cfg['port']}...")
+
+    try:
+        ser = serial.Serial(
+            port=ser_cfg["port"],
+            baudrate=ser_cfg["baudrate"],
+            bytesize=ser_cfg["bytesize"],
+            parity={
+                "N": serial.PARITY_NONE,
+                "E": serial.PARITY_EVEN,
+                "O": serial.PARITY_ODD
+            }[ser_cfg["parity"]],
+            stopbits=ser_cfg["stopbits"],
+            timeout=0.5  # 500 ms
+        )
+    except Exception as e:
+        salir(f"No se pudo abrir el puerto: {e}", 2)
+
+    print("Dispositivo hallado")
+
+def enviar(indice):
+    global ser
+    if not ser or not ser.is_open:
+        print("Puerto no inicializado")
+        return
+
+    cmd = f"A{indice}\r"
+    print(f"Enviando: {cmd.strip()}")
+
+    ser.write(cmd.encode())
+
+    time.sleep(0.5)
+
+    raw = ser.readline()
+    texto = raw.decode(errors="ignore").strip()
+
+    print(f"Respuesta recibida -> '{texto}'")
+    return texto
+
+
+def cerrar_serial():
+    if ser and ser.is_open:
+        ser.close()
+        print("Puerto cerrado")
+        
+  
 config_path = os.path.join(base_path(), "config.json")
 
 try:
@@ -27,66 +79,40 @@ except Exception as e:
     input("ENTER para salir...")
     sys.exit(1)
 
-ser_cfg = cfg["serial"]
+ser = None  # 👈 referencia global controlada
 
-print(f"Abriendo puerto {ser_cfg['port']}...")
+class Api:
+    def cerrar(self):
+        print("Cerrando aplicación...")
+        os._exit(0)
+    def enviar(self, indice):
+        print(f"Enviar {indice}")
+        return enviar(indice)   # llama a tu función real
 
-try:
-    ser = serial.Serial(
-        port=ser_cfg["port"],
-        baudrate=ser_cfg["baudrate"],
-        bytesize=ser_cfg["bytesize"],
-        parity={
-            "N": serial.PARITY_NONE,
-            "E": serial.PARITY_EVEN,
-            "O": serial.PARITY_ODD
-        }[ser_cfg["parity"]],
-        stopbits=ser_cfg["stopbits"],
-        timeout=0.5  # 500 ms
+    
+def start_webview():
+    html_path = os.path.join(base_path(), "ui", "index.html")
+
+    webview.create_window(
+        "Vending Monitor",
+        html_path,
+        fullscreen=True,
+        js_api=Api()
     )
-except Exception as e:
-    salir(f"No se pudo abrir el puerto: {e}", 2)
+    webview.start()
+    
+def run_serial():
+    init_serial()
 
-print("Dispositivo hallado")
+    # ejemplo de uso
+    #enviar(1)
+    #time.sleep(1)
+    #enviar(2)
 
-time.sleep(2)
+def launch_serial():
+    t = threading.Thread(target=run_serial, daemon=True)
+    t.start()
 
-cmd = cfg["commands"]["status"]
-print(f"Enviando: {cmd.strip()}")
-
-try:
-    ser.write(cmd.encode())
-except Exception as e:
-    ser.close()
-    salir(f"Error enviando comando: {e}", 3)
-
-print("Esperando respuesta (5 intentos, 500 ms cada uno)...")
-
-respuesta = ""
-intentos = 5
-
-for i in range(1, intentos + 1):
-    try:
-        raw = ser.readline()
-        texto = raw.decode(errors="ignore").strip()
-
-        if texto:
-            print(f"Intento {i}: respuesta recibida -> '{texto}'")
-            respuesta = texto
-            break
-        else:
-            print(f"Intento {i}: sin respuesta")
-    except Exception as e:
-        print(f"Intento {i}: error leyendo -> {e}")
-
-ser.close()
-
-if not respuesta:
-    salir("No hubo respuesta del dispositivo tras 5 intentos", 5)
-
-mensaje = cfg["responses"].get(respuesta, "Código desconocido")
-
-print(f"Respuesta final: {respuesta}")
-print(f"Estado: {mensaje}")
-
-salir("Proceso finalizado")
+if __name__ == "__main__":
+    launch_serial()   # 🔌 serial en paralelo
+    start_webview()   # 🖥️ webview en el MAIN THREAD
