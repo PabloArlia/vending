@@ -5,10 +5,8 @@
     "bytesize": 8,
     "parity": "N",
     "stopbits": 1,
-    "timeout": 1
-  },
-  "commands": {
-    "status": "A01\r"
+    "timeout": 1,
+	"waittime":2.5	
   },
   "responses": {
     "E00": "¡GENIAL! RETIRÁ TU VALIJA<br/> DEL CONTENEDOR...",

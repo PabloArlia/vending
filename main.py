@@ -16,8 +16,6 @@ def base_path():
 
 def salir(msg, code=0):
     print(msg)
-    input("\nPresione ENTER para salir...")
-    sys.exit(code)
 
 def init_serial():
     global ser
@@ -45,16 +43,20 @@ def init_serial():
 
 def enviar(indice):
     global ser
+    global tespera
+    
+    cmd = f"A{indice}\r"
+    
+    print(f" Tiempo: '{tespera}' | Indice abierto: '{cmd}'")
     if not ser or not ser.is_open:
         print("Puerto no inicializado")
         return
 
-    cmd = f"A{indice}\r"
     print(f"Enviando: {cmd.strip()}")
 
     ser.write(cmd.encode())
 
-    time.sleep(0.5)
+    time.sleep(tespera)
 
     raw = ser.readline()
     texto = raw.decode(errors="ignore").strip()
@@ -75,11 +77,11 @@ try:
     with open(config_path, "r", encoding="utf-8") as f:
         cfg = json.load(f)
 except Exception as e:
-    print(f"No se encontró config.json en:\n{config_path}")
-    input("ENTER para salir...")
+    print(f"No se encontró config.json en:\n{config_path} \r")
     sys.exit(1)
 
 ser = None  # 👈 referencia global controlada
+tespera = cfg["serial"]["waittime"]
 
 class Api:
     def cerrar(self):
@@ -103,11 +105,6 @@ def start_webview():
     
 def run_serial():
     init_serial()
-
-    # ejemplo de uso
-    #enviar(1)
-    #time.sleep(1)
-    #enviar(2)
 
 def launch_serial():
     t = threading.Thread(target=run_serial, daemon=True)
