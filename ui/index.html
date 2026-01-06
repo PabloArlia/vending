@@ -31,7 +31,7 @@
 					position:relative;
 					height: 100vh;
 					width: auto;
-					aspect-ratio: 1050 / 1920;
+					aspect-ratio: 1080 / 1920;
 					max-width: 1080px;
 					max-height: 1920px;
 				}
@@ -60,6 +60,9 @@
 			}
 			#logojuego {
 				height:10vh;
+			}
+			#logofinal {
+				height:11vh;
 			}
 			#juego p {
 				font-size:2.2vh;
@@ -98,31 +101,39 @@
 				top:10.6%;
 			}
 			#est02 {
-				top:27.3%;
+				top:27.5%;
 			}
 			#est03 {
 				top:44.0%;
 			}
 			#est04 {
-				top:60.6%;
+				top:61%;
 			}
 			#est05 {
-				top:77.3%;
+				top:77.8%;
 			}
 			#est06 {
-				top:94.0%;
+				top:94.3%;
 			}
 			.valija {
 				width: 18%;
 				position:absolute;
-				transition:0.2s;
+				transition:0.3s;
 			}
 			.valija.afuera {
 				left:-50% !important;
 			}
+			.fondoazul {
+				position:absolute;
+				top:0;
+				left:0;
+				width:100%;
+				height>100%;
+				background:rgba(0,73,118,0.5);
+			}
 			.valija.centro {
 				width: 60%;
-				z-index: 2;
+				z-index: 3;
 				top: 28% !important;
 				left: 17% !important;
 				transition:0.3s;
@@ -160,11 +171,17 @@
 			#val05, #val10, #val15, #val20, #val25, #val30 {
 				left:81%;
 			}
-			#final, #home {
+			#final, #finalok, #home {
 				background:url('img/fondofin.png') top center no-repeat #F1E3CD;
 				background-size: cover;	
-				z-index:3;
+				z-index:5;
 			}
+			 #home {
+				z-index:8;
+			 }
+			 #finalok {
+				z-index:7;
+			 }
 			#final > div, #home > div {
 				width:100%;
 				height:100vh;
@@ -175,6 +192,10 @@
 				padding:12vh 2%;
 				box-sizing:border-box;
 			}
+			#final > div {
+				padding: 13vh 2% 15vh 2%;
+			}
+			
 			#final p, #home p {
 				font-size:2.2vh;
 				text-align:center;
@@ -183,40 +204,47 @@
 			}
 			#finalimg {
 				display:block;
-				width:90%;
+				width:95%;
 			}
-			#bubuja {
-				font-size:2.2vh;
-				color:#F1E3CD;
-				background:url('img/burbuja.png') top center no-repeat;
-				background-size:100% auto;
-				width:90%;
-				text-align:center;
-				height:20%;
-				padding-top:5%;
+			#burbujacont {
+				height: 22%;
+				overflow: hidden;
+				width: 73%;
+			}
+			#burbuja {
+				font-size: 2.2vh;
+				color: #F1E3CD;
+				background: url(img/burbuja.png) top center no-repeat;
+				background-size: 100% auto;
+				width: 100%;
+				text-align: center;
+				height: 100%;
+				padding-top: 8%;
 				font-family: 'dollop_serifexpanded';
 			}
-			#final {
+			#final, #finalok {
 				display:none;
 			}
-			#home video {
-				width: 90%;
-				height: auto;
+			.megavideo video {
+				width: 100%;
+				height: 100%;
 				object-fit: cover;
 				display:block;
-				margin:auto;
-				background: #fff;
+				position:absolute;
+				top:0;
+				left:0;
 			}
 		</style>
 		<script src="jquery.min.js"></script>
 		<script>
 		
-			function reiniciar() {	
+			function reiniciar() {
 				video.pause();			
+				$('.fondoazul').hide();
 				$('.valija').addClass('afuera');
 				$('.valija').removeClass('centro');
 				//setTimeout(va,1000);
-				$('#final').hide();
+				$('#final,#finalok').hide();
 				$('#home').fadeOut();
 				va();
 			}
@@ -238,34 +266,49 @@
 					}, delay);
 				});
 			}
-			function finaliza() {
-				$('#final').fadeIn();
+			function cierrefinal(texto) {
+				if (texto=="OK") {
+					videofinal.currentTime = 0;
+					$('#finalok').fadeIn(function() {		
+						videofinal.play();							
+						setTimeout(home,10000);
+					});					
+				} else {
+					$('#burbuja').html(texto);
+					$('#final').fadeIn();
+				}
 			}
-			
+			var video = null;
+			var videofinal = null;
 			$().ready(function() {
-				const video = document.getElementById('video');
+				video = document.getElementById('videoinicio');
+				videofinal = document.getElementById('videofinal');
 				$('#logojuego').click(reiniciar);
 				$('.valija').click(async function() {
+					$('.fondoazul').fadeIn();
+					$(this).addClass('centro');
 					const indice = $(this).attr('src').replace(/\D/g, '')						
 					if (window.pywebview && window.pywebview.api) {
-						 const result = await window.pywebview.api.enviar(indice);
-						 $('#burbuja').html(result);
+						const result = await window.pywebview.api.enviar(indice);
+						cierrefinal(result)
 					} else {
 						console.log("pywebview no disponible, simulo envío:", indice);
+						setTimeout(function() {
+							cierrefinal("OK")
+						},2500);
 					}
-					$(this).addClass('centro');
-					setTimeout(finaliza,300);
 				});
-				$('#final').click(function() {
-					video.currentTime = 0;
-					$('#home').fadeIn(function() {
-						video.play();
-					});					
-				});
+				$('#final,#final2').click(home);
 				$('#home').click(function() {
 					reiniciar();
 				});
 			});
+			function home() {
+				video.currentTime = 0;
+				$('#home').fadeIn(function() {
+					video.play();
+				});	
+			}
 			function setup() {
 				console.log("pywebview listo");
 
@@ -286,14 +329,6 @@
 	</head>
 	<body>
 		<div id="marco">
-			<div id="final" class="pantalla">
-				<div>
-					<img id="logojuego" src="img/logo.png" />
-					<div id="bubuja">¡GENIAL! RETIRÁ TU VALIJA<br/> DEL CONTENEDOR...</div>
-					<img id="finalimg" src="img/final.png" />
-					<p>¡Etiquetanos con tu premio! @HellmannsArg</p>
-				</div>
-			</div>
 			<div id="juego" class="pantalla">
 				<div>
 					<img id="logojuego" src="img/logo.png" />
@@ -374,16 +409,28 @@
 						</div>
 					</div>
 				</div>
+				<div class="fondoazul"></div>
 			</div>
 			<div id="final" class="pantalla">
 				<div>
-					<img id="logojuego" src="img/logo.png" />
-					<div id="bubuja">¡GENIAL! RETIRÁ TU VALIJA<br/> DEL CONTENEDOR...</div>
+					<img id="logofinal" src="img/logo.png" />
+					<div id="burbujacont">
+						<div id="burbuja">¡GENIAL! RETIRÁ TU VALIJA<br/> DEL CONTENEDOR...</div>
+					</div>
 					<img id="finalimg" src="img/final.png" />
 					<p>¡Etiquetanos con tu premio! @HellmannsArg</p>
 				</div>
 			</div>
-			<div id="home" class="pantalla">
+			<div id="finalok" class="pantalla megavideo">
+				<video id="videofinal" autoplay muted playsinline>
+					<source src="img/final.mp4" type="video/mp4">
+				</video>
+			</div>
+			<div id="home" class="pantalla megavideo">
+				<video id="videoinicio" autoplay muted loop playsinline>
+					<source src="img/inicio.mp4" type="video/mp4">
+				</video>
+				<!--
 				<div>
 					<img id="logojuego" src="img/logo.png" />
 					<video id="video" autoplay muted loop playsinline>
@@ -391,6 +438,7 @@
 					</video>
 					<p>Home</p>
 				</div>
+				-->
 			</div>
 		</div>
 	</body>

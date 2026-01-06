@@ -9,7 +9,7 @@
 	"waittime":2.5	
   },
   "responses": {
-    "E00": "¡GENIAL! RETIRÁ TU VALIJA<br/> DEL CONTENEDOR...",
+    "E00": "OK",
     "E01": "FALLA DE ENERGÍA",
     "E02": "NO CAYÓ",
     "E03": "AGOTADO"

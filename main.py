@@ -47,10 +47,11 @@ def enviar(indice):
     
     cmd = f"A{indice}\r"
     
-    print(f" Tiempo: '{tespera}' | Indice abierto: '{cmd}'")
+    print(f"Tiempo: '{tespera}' | Indice abierto: 'A{indice}'\r")
     if not ser or not ser.is_open:
         print("Puerto no inicializado")
-        return
+        time.sleep(tespera)
+        return "OK"
 
     print(f"Enviando: {cmd.strip()}")
 
@@ -101,6 +102,7 @@ def start_webview():
         fullscreen=True,
         js_api=Api()
     )
+    #webview.start(debug=True)
     webview.start()
     
 def run_serial():
