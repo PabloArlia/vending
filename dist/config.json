@@ -1,17 +1,17 @@
 {
   "serial": {
-    "port": "COM3",
+    "ports": ["COM11", "COM6", "COM7", "COM8", "COM9", "COM10"],
     "baudrate": 9600,
     "bytesize": 8,
     "parity": "N",
     "stopbits": 1,
     "timeout": 1,
-	"waittime":2.5	
+    "waittime": 2.5
   },
   "responses": {
-    "E00": "OK",
-    "E01": "FALLA DE ENERGÍA",
-    "E02": "NO CAYÓ",
-    "E03": "AGOTADO"
+    "B1": "OK",
+    "E1": "FALLA DE ENERGÍA",
+    "E2": "NO CAYÓ",
+    "E3": "AGOTADO"
   }
 }

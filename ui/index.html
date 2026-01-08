@@ -88,7 +88,7 @@
 				color:#fff;
 				background:#728cab;
 				display:block;
-				width:20%;
+				width:25%;
 				padding:0.5vh 0;
 			}
 			.estante span:first-child {
@@ -138,38 +138,35 @@
 				left: 17% !important;
 				transition:0.3s;
 			}
-			#val01, #val02, #val03, #val04, #val05 {
+			#val01, #val02, #val03, #val04 {
 				top: 0;
 			}
-			#val06, #val07, #val08, #val09, #val10 {
+			#val06, #val07, #val08, #val05 {
 				top: 17%;
 			}
-			#val11, #val12, #val13, #val14, #val15 {
+			#val11, #val09, #val10, #val12 {
 				top: 33.5%;
 			}
-			#val16, #val17, #val18, #val19, #val20 {
+			#val16, #val13, #val14, #val15 {
 				top: 50.3%;
 			}
-			#val21, #val22, #val23, #val24, #val25 {
+			#val17, #val18, #val19, #val20 {
 				top: 67.0%;
 			}
-			#val26, #val27, #val28, #val29, #val30 {
+			#val21, #val22, #val23, #val24 {
 				top: 83.6%;
 			}
-			#val01, #val06, #val11, #val16, #val21, #val26 {
-				left:1%;
+			#val01, #val05, #val09, #val13, #val17, #val21 {
+				left:4.5%;
 			}
-			#val02, #val07, #val12, #val17, #val22, #val27 {
-				left:21%;
+			#val02, #val06, #val10, #val14, #val18, #val22 {
+				left:28.5%;
 			}
-			#val03, #val08, #val13, #val18, #val23, #val28 {
-				left:41%;
+			#val03, #val07, #val11, #val15, #val19, #val23 {
+				left:54%;
 			}
-			#val04, #val09, #val14, #val19, #val24, #val29 {
-				left:61%;
-			}
-			#val05, #val10, #val15, #val20, #val25, #val30 {
-				left:81%;
+			#val04, #val08, #val12, #val16, #val20, #val24 {
+				left:78%;
 			}
 			#final, #finalok, #home {
 				background:url('img/fondofin.png') top center no-repeat #F1E3CD;
@@ -249,9 +246,9 @@
 				va();
 			}
 			function va() {
-				const porFila = 5;
+				const porFila = 4;
 				const delayItem = 150; // si querés aún más rápido, bajalo a 120 o 100
-				const overlap = 3;     // empieza en la 2 (antes era la 3)
+				const overlap = 2;     // empieza en la 2 (antes era la 3)
 
 				$('.valija').each(function (i) {
 					const fila = Math.floor(i / porFila);
@@ -267,17 +264,35 @@
 				});
 			}
 			function cierrefinal(texto) {
-				if (texto=="OK") {
+				texto = (texto || "").trim();
+
+				// Casos que muestran video
+				if (texto === "" || texto === "OK" || texto === "B1") {
+
 					videofinal.currentTime = 0;
-					$('#finalok').fadeIn(function() {		
-						videofinal.play();							
-						setTimeout(home,10000);
-					});					
-				} else {
-					$('#burbuja').html(texto);
-					$('#final').fadeIn();
+
+					$('#finalok').fadeIn(function () {
+						videofinal.play();
+						setTimeout(home, 10000);
+					});
+
+					return;
 				}
+
+				// Mapeo de errores
+				const errores = {
+					"E1": "Falla de energía",
+					"E2": "No cayó",
+					"E3": "Agotado"
+				};
+
+				// Normalizar E01 → E1
+				texto = texto.replace(/^E0/, "E");
+
+				$('#burbuja').html(errores[texto] || texto);
+				$('#final').fadeIn();
 			}
+
 			var video = null;
 			var videofinal = null;
 			$().ready(function() {
@@ -358,54 +373,42 @@
 						<img class="valija" id="val22" src="img/val22.png" />
 						<img class="valija" id="val23" src="img/val23.png" />
 						<img class="valija" id="val24" src="img/val24.png" />
-						<img class="valija" id="val25" src="img/val25.png" />
-						<img class="valija" id="val26" src="img/val26.png" />
-						<img class="valija" id="val27" src="img/val27.png" />
-						<img class="valija" id="val28" src="img/val28.png" />
-						<img class="valija" id="val29" src="img/val29.png" />
-						<img class="valija" id="val30" src="img/val30.png" />
 
 						<div class="estante" id="est01" />
 							<span>1</span>
 							<span>2</span>
 							<span>3</span>
 							<span>4</span>
-							<span>5</span>
 						</div>
 						<div class="estante" id="est02" />
+							<span>5</span>
 							<span>6</span>
 							<span>7</span>
 							<span>8</span>
-							<span>9</span>
-							<span>10</span>
 						</div>
 						<div class="estante" id="est03" />
+							<span>9</span>
+							<span>10</span>
 							<span>11</span>
 							<span>12</span>
+						</div>
+						<div class="estante" id="est04" />
 							<span>13</span>
 							<span>14</span>
 							<span>15</span>
-						</div>
-						<div class="estante" id="est04" />
 							<span>16</span>
+						</div>
+						<div class="estante" id="est05" />
 							<span>17</span>
 							<span>18</span>
 							<span>19</span>
 							<span>20</span>
 						</div>
-						<div class="estante" id="est05" />
+						<div class="estante" id="est06" />
 							<span>21</span>
 							<span>22</span>
 							<span>23</span>
 							<span>24</span>
-							<span>25</span>
-						</div>
-						<div class="estante" id="est06" />
-							<span>26</span>
-							<span>27</span>
-							<span>28</span>
-							<span>29</span>
-							<span>30</span>
 						</div>
 					</div>
 				</div>

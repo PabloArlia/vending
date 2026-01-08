@@ -16,54 +16,79 @@ def base_path():
 
 def salir(msg, code=0):
     print(msg)
+import serial
+
+ser = []  # lista global
 
 def init_serial():
     global ser
+    ser = []
+
     ser_cfg = cfg["serial"]
 
-    print(f"Abriendo puerto {ser_cfg['port']}...")
+    for i, port in enumerate(ser_cfg["ports"]):
+        try:
+            print(f"Abriendo puerto {port}...")
 
-    try:
-        ser = serial.Serial(
-            port=ser_cfg["port"],
-            baudrate=ser_cfg["baudrate"],
-            bytesize=ser_cfg["bytesize"],
-            parity={
-                "N": serial.PARITY_NONE,
-                "E": serial.PARITY_EVEN,
-                "O": serial.PARITY_ODD
-            }[ser_cfg["parity"]],
-            stopbits=ser_cfg["stopbits"],
-            timeout=0.5  # 500 ms
-        )
-    except Exception as e:
-        salir(f"No se pudo abrir el puerto: {e}", 2)
+            s = serial.Serial(
+                port=port,
+                baudrate=ser_cfg["baudrate"],
+                bytesize=ser_cfg["bytesize"],
+                parity={
+                    "N": serial.PARITY_NONE,
+                    "E": serial.PARITY_EVEN,
+                    "O": serial.PARITY_ODD
+                }[ser_cfg["parity"]],
+                stopbits=ser_cfg["stopbits"],
+                timeout=ser_cfg.get("timeout", 0.5)
+            )
 
-    print("Dispositivo hallado")
+            ser.append(s)
+
+        except Exception as e:
+            salir(f"No se pudo abrir {port}: {e}", 2)
+
+
 
 def enviar(indice):
     global ser
     global tespera
     
-    cmd = f"A{indice}\r"
+    print("SER FINAL:")
+    for i, s in enumerate(ser):
+        print(i, s)
+
+
+    indice = int(indice)
+    ser_index = (indice - 1) // 4
+    pos = 5-((indice - 1) % 4)
     
-    print(f"Tiempo: '{tespera}' | Indice abierto: 'A{indice}'\r")
-    if not ser or not ser.is_open:
+    print(f"Tiempo: {tespera} | Indice abierto: A{pos} | Puerto: {ser_index}")
+
+    if ser_index >= len(ser):
+        print(f"No existe ser[{ser_index}] para indice {pos}")
+        return "ERROR"
+
+    puerto = ser[ser_index]
+
+    cmd = f"A{pos:02d}{chr(10)}"
+    
+    if not puerto or not puerto.is_open:
         print("Puerto no inicializado")
         time.sleep(tespera)
         return "OK"
 
     print(f"Enviando: {cmd.strip()}")
-
-    ser.write(cmd.encode())
+    puerto.write(cmd.encode())
 
     time.sleep(tespera)
 
-    raw = ser.readline()
+    raw = puerto.readline()
     texto = raw.decode(errors="ignore").strip()
 
     print(f"Respuesta recibida -> '{texto}'")
     return texto
+
 
 
 def cerrar_serial():
@@ -102,7 +127,7 @@ def start_webview():
         fullscreen=True,
         js_api=Api()
     )
-    #webview.start(debug=True)
+    #webview.start(debug=True,args=["--disable-gpu","--disable-software-rasterizer","--autoplay-policy=no-user-gesture-required"])
     webview.start()
     
 def run_serial():
@@ -115,3 +140,5 @@ def launch_serial():
 if __name__ == "__main__":
     launch_serial()   # 🔌 serial en paralelo
     start_webview()   # 🖥️ webview en el MAIN THREAD
+    
+input("cierre")
