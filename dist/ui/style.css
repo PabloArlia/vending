@@ -1,0 +1,285 @@
+@font-face {
+	font-family: 'dollop_serifexpanded';
+	src: url('font/dollopserif-expanded-webfont.woff2') format('woff2'),
+		 url('font/dollopserif-expanded-webfont.woff') format('woff');
+	font-weight: normal;
+	font-style: normal;
+}
+@font-face {
+	font-family: 'dollop_serifcondensed';
+	src: url('font/dollopserif-condensed-webfont.woff2') format('woff2'),
+		 url('font/dollopserif-condensed-webfont.woff') format('woff');
+	font-weight: normal;
+	font-style: normal;
+}
+* {
+	margin:0;
+	padding:0;
+}
+#marco {
+	height: 100vh;
+	width: 100vw;
+	overflow:hidden;
+}
+@media (orientation: landscape) {
+	#marco {
+		margin:auto;
+		position:relative;
+		height: 100vh;
+		width: auto;
+		aspect-ratio: 1080 / 1920;
+		max-width: 1080px;
+		max-height: 1920px;
+	}
+}
+
+.pantalla {
+	position:absolute;
+	top:0;
+	left:0;
+	width:100%;
+	height:100%;
+}
+#juego {
+	background:url('img/fondojuego.png') top center no-repeat #F1E3CD;
+	background-size: 100% auto;
+}
+#juego > div {
+	width:100%;
+	height:100vh;
+	display:flex;
+	justify-content:space-around;
+	align-items: center;
+	flex-direction:column;
+	padding:2vh 2%;
+	box-sizing:border-box;
+}
+#logojuego {
+	height:10vh;
+}
+#juego p {
+	font-size:2.2vh;
+	text-align:center;
+	font-family: 'dollop_serifexpanded';
+	color:#004976;
+}
+#estantes {
+	height:70vh;
+	width:90%;
+	position:relative;
+}
+.estante {
+	position:absolute;
+	left:0;
+	display:flex;
+	width:100%;
+}
+.estante span {
+	font-size:2.2vh;
+	text-align:center;
+	font-family: 'dollop_serifexpanded';
+	color:#fff;
+	background:#728cab;
+	display:block;
+	width:25%;
+	padding:0.5vh 0;
+}
+.estante span:first-child {
+	border-radius: 1vh 0 0 0;
+}
+.estante span:last-child {
+	border-radius: 0 1vh 0 0;
+}
+#est01 {
+	top:10.6%;
+}
+.estante#est01 span, .estante#est02 span {
+	background-color: #968e00;
+}
+#est02 {
+	top:27.5%;
+}
+#est03 {
+	top:44.0%;
+}
+.estante#est03 span, .estante#est04 span {
+	background-color: #a5a5a5;
+}
+#est04 {
+	top:61%;
+}
+#est05 {
+	top:77.8%;
+}
+#est06 {
+	top:94.3%;
+}
+.estante#est05 span, .estante#est06 span {
+	background-color: #b78534;
+}
+.valija {
+	width: 18%;
+	position:absolute;
+	transition:0.3s;
+}
+.valija.bloqueada, .estante.bloqueada {
+	filter:blur(0.35vh);
+	opacity:0.45;
+	pointer-events:none;
+}
+.valija.afuera {
+	left:-50% !important;
+}
+.fondoazul {
+	position:absolute;
+	top:0;
+	left:0;
+	width:100%;
+	height>100%;
+	background:rgba(0,73,118,0.5);
+}
+.valija.centro {
+	width: 60%;
+	z-index: 3;
+	top: 28% !important;
+	left: 17% !important;
+	transition:0.3s;
+}
+#val01, #val02, #val03, #val04 {
+	top: 0;
+}
+#val06, #val07, #val08, #val05 {
+	top: 17%;
+}
+#val11, #val09, #val10, #val12 {
+	top: 33.5%;
+}
+#val16, #val13, #val14, #val15 {
+	top: 50.3%;
+}
+#val17, #val18, #val19, #val20 {
+	top: 67.0%;
+}
+#val21, #val22, #val23, #val24 {
+	top: 83.6%;
+}
+#val01, #val05, #val09, #val13, #val17, #val21 {
+	left:4.5%;
+}
+#val02, #val06, #val10, #val14, #val18, #val22 {
+	left:28.5%;
+}
+#val03, #val07, #val11, #val15, #val19, #val23 {
+	left:54%;
+}
+#val04, #val08, #val12, #val16, #val20, #val24 {
+	left:78%;
+}
+#home, #categoria {
+	background:url('img/fondohome.png') top center no-repeat #F1E3CD;
+	background-size: cover;
+	z-index:8;
+}
+#categoria {
+	z-index:7;
+}
+#home > div, #categoria > div {
+	width:100%;
+	height:100vh;
+	display:flex;
+	justify-content:space-around;
+	align-items: center;
+	flex-direction:column;
+	padding:12vh 2%;
+	box-sizing:border-box;
+}
+#home > div, #categoria > div {
+	position:relative;
+	justify-content:flex-start;
+	gap:2vh;
+	padding:12vh 6% 16vh 6%;
+}
+#categoria > div {
+	padding-bottom: 4vh;
+}
+#home p {
+	font-size:2.2vh;
+	text-align:center;
+	font-family: 'dollop_serifcondensed';
+	color:#004976;
+}
+#categoria {
+	display:none;
+}
+.logohome {
+	display:block;
+	height:12vh;
+	width:auto;
+	object-fit:contain;
+	z-index:2;
+}
+#homevisual, #categoriavisual {
+	position:relative;
+	width:100%;
+	flex:1;
+	min-height:0;
+	display:flex;
+	flex-direction:column;
+	justify-content:center;
+	align-items:center;
+	gap:3vh;
+}
+#introimg, #categoriaimg {
+	display:block;
+	width:82%;
+	max-height:38vh;
+	object-fit:contain;
+	z-index:1;
+}
+.mayonesin {
+	display:block;
+	width:65vw;
+	max-height:32vh;
+	object-fit:contain;
+	z-index:2;
+}
+#botonescategoria {
+	width:100%;
+	display:flex;
+	flex-direction:column;
+	align-items:center;
+	gap:1.5vh;
+	z-index:3;
+}
+#comenzar, .categoria-boton {
+	width:78%;
+	max-width:42vh;
+	border:0.5vh solid #f6bd00;
+	border-radius:999vh;
+	background:#012f67;
+	color:#F1E3CD;
+	font-family:'dollop_serifexpanded';
+	font-size:2.6vh;
+	line-height:1;
+	padding:1.8vh 5vh 1.5vh 5vh;
+	cursor:pointer;
+	z-index:3;
+}
+.categoria-boton {
+	min-width:0;
+}
+.categoria-boton.oro {
+	background:#847842;
+}
+.categoria-boton.plata {
+	background:#a5a5a5;
+}
+.categoria-boton.bronce {
+	background:#b78534;
+}
+.categoria-boton span {
+	font-family:'dollop_serifcondensed';
+}
+#comenzar:active, .categoria-boton:active {
+	transform:translateY(0.5vh);
+}

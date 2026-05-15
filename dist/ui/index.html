@@ -1,248 +1,14 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<style>
-			@font-face {
-				font-family: 'dollop_serifexpanded';
-				src: url('font/dollopserif-expanded-webfont.woff2') format('woff2'),
-					 url('font/dollopserif-expanded-webfont.woff') format('woff');
-				font-weight: normal;
-				font-style: normal;
-			}
-			@font-face {
-				font-family: 'dollop_serifcondensed';
-				src: url('font/dollopserif-condensed-webfont.woff2') format('woff2'),
-					 url('font/dollopserif-condensed-webfont.woff') format('woff');
-				font-weight: normal;
-				font-style: normal;
-			}
-			* {
-				margin:0;
-				padding:0;
-			}
-			#marco {
-				height: 100vh;
-				width: 100vw;
-				overflow:hidden;
-			}
-			@media (orientation: landscape) {
-				#marco {
-					margin:auto;
-					position:relative;
-					height: 100vh;
-					width: auto;
-					aspect-ratio: 1080 / 1920;
-					max-width: 1080px;
-					max-height: 1920px;
-				}
-			}
-			
-			.pantalla {
-				position:absolute;
-				top:0;
-				left:0;
-				width:100%;
-				height:100%;
-			}
-			#juego {
-				background:url('img/fondojuego.png') top center no-repeat #F1E3CD;
-				background-size: 100% auto;			
-			}
-			#juego > div {
-				width:100%;
-				height:100vh;
-				display:flex;
-				justify-content:space-around;
-				align-items: center;
-				flex-direction:column;
-				padding:2vh 2%;
-				box-sizing:border-box;
-			}
-			#logojuego {
-				height:10vh;
-			}
-			#logofinal {
-				height:11vh;
-			}
-			#juego p {
-				font-size:2.2vh;
-				text-align:center;
-				font-family: 'dollop_serifexpanded';
-				color:#004976;
-			}
-			#estantes {
-				height:70vh;
-				width:90%;
-				position:relative;
-			}
-			.estante {
-				position:absolute;
-				left:0;
-				display:flex;
-				width:100%;
-			}
-			.estante span {
-				font-size:2.2vh;
-				text-align:center;
-				font-family: 'dollop_serifexpanded';
-				color:#fff;
-				background:#728cab;
-				display:block;
-				width:25%;
-				padding:0.5vh 0;
-			}
-			.estante span:first-child {
-				border-radius: 1vh 0 0 0;
-			}
-			.estante span:last-child {
-				border-radius: 0 1vh 0 0;
-			}
-			#est01 {
-				top:10.6%;
-			}
-			#est02 {
-				top:27.5%;
-			}
-			#est03 {
-				top:44.0%;
-			}
-			#est04 {
-				top:61%;
-			}
-			#est05 {
-				top:77.8%;
-			}
-			#est06 {
-				top:94.3%;
-			}
-			.valija {
-				width: 18%;
-				position:absolute;
-				transition:0.3s;
-			}
-			.valija.afuera {
-				left:-50% !important;
-			}
-			.fondoazul {
-				position:absolute;
-				top:0;
-				left:0;
-				width:100%;
-				height>100%;
-				background:rgba(0,73,118,0.5);
-			}
-			.valija.centro {
-				width: 60%;
-				z-index: 3;
-				top: 28% !important;
-				left: 17% !important;
-				transition:0.3s;
-			}
-			#val01, #val02, #val03, #val04 {
-				top: 0;
-			}
-			#val06, #val07, #val08, #val05 {
-				top: 17%;
-			}
-			#val11, #val09, #val10, #val12 {
-				top: 33.5%;
-			}
-			#val16, #val13, #val14, #val15 {
-				top: 50.3%;
-			}
-			#val17, #val18, #val19, #val20 {
-				top: 67.0%;
-			}
-			#val21, #val22, #val23, #val24 {
-				top: 83.6%;
-			}
-			#val01, #val05, #val09, #val13, #val17, #val21 {
-				left:4.5%;
-			}
-			#val02, #val06, #val10, #val14, #val18, #val22 {
-				left:28.5%;
-			}
-			#val03, #val07, #val11, #val15, #val19, #val23 {
-				left:54%;
-			}
-			#val04, #val08, #val12, #val16, #val20, #val24 {
-				left:78%;
-			}
-			#final, #finalok, #home {
-				background:url('img/fondofin.png') top center no-repeat #F1E3CD;
-				background-size: cover;	
-				z-index:5;
-			}
-			 #home {
-				z-index:8;
-			 }
-			 #finalok {
-				z-index:7;
-			 }
-			#final > div, #home > div {
-				width:100%;
-				height:100vh;
-				display:flex;
-				justify-content:space-around;
-				align-items: center;
-				flex-direction:column;
-				padding:12vh 2%;
-				box-sizing:border-box;
-			}
-			#final > div {
-				padding: 13vh 2% 15vh 2%;
-			}
-			
-			#final p, #home p {
-				font-size:2.2vh;
-				text-align:center;
-				font-family: 'dollop_serifcondensed';
-				color:#004976;
-			}
-			#finalimg {
-				display:block;
-				width:95%;
-			}
-			#burbujacont {
-				height: 22%;
-				overflow: hidden;
-				width: 73%;
-			}
-			#burbuja {
-				font-size: 2.2vh;
-				color: #F1E3CD;
-				background: url(img/burbuja.png) top center no-repeat;
-				background-size: 100% auto;
-				width: 100%;
-				text-align: center;
-				height: 100%;
-				padding-top: 8%;
-				font-family: 'dollop_serifexpanded';
-			}
-			#final, #finalok {
-				display:none;
-			}
-			.megavideo video {
-				width: 100%;
-				height: 100%;
-				object-fit: cover;
-				display:block;
-				position:absolute;
-				top:0;
-				left:0;
-			}
-		</style>
+		<link rel="stylesheet" href="style.css" />
 		<script src="jquery.min.js"></script>
 		<script>
-		
 			function reiniciar() {
-				video.pause();			
 				$('.fondoazul').hide();
 				$('.valija').addClass('afuera');
 				$('.valija').removeClass('centro');
-				//setTimeout(va,1000);
-				$('#final,#finalok').hide();
-				$('#home').fadeOut();
+				$('#home,#categoria').fadeOut();
 				va();
 			}
 			function va() {
@@ -263,43 +29,66 @@
 					}, delay);
 				});
 			}
-			function cierrefinal(texto) {
-				texto = (texto || "").trim();
+			function limpiarCategoria() {
+				$('.valija,.estante').removeClass('bloqueada');
+			}
+			function aplicarCategoria(categoria) {
+				const configuracion = {
+					oro: {
+						estantes: [3, 4, 5, 6],
+						valijasDesde: 9,
+						valijasHasta: 24
+					},
+					plata: {
+						estantes: [1, 2, 5, 6],
+						valijas: [[1, 8], [17, 24]]
+					},
+					bronce: {
+						estantes: [1, 2, 3, 4],
+						valijasDesde: 1,
+						valijasHasta: 16
+					}
+				};
+				const filtro = configuracion[categoria];
 
-				// Casos que muestran video
-				if (texto === "" || texto === "OK" || texto === "B1") {
+				limpiarCategoria();
 
-					videofinal.currentTime = 0;
-
-					$('#finalok').fadeIn(function () {
-						videofinal.play();
-						setTimeout(home, 10000);
-					});
-
+				if (!filtro) {
 					return;
 				}
 
-				// Mapeo de errores
-				const errores = {
-					"E1": "Falla de energía",
-					"E2": "No cayó",
-					"E3": "Agotado"
-				};
+				filtro.estantes.forEach(function(numero) {
+					$('#est' + String(numero).padStart(2, '0')).addClass('bloqueada');
+				});
 
-				// Normalizar E01 → E1
-				texto = texto.replace(/^E0/, "E");
+				$('.valija').each(function() {
+					const numero = parseInt(this.id.replace('val', ''), 10);
+					let bloqueada = false;
 
-				$('#burbuja').html(errores[texto] || texto);
-				$('#final').fadeIn();
+					if (filtro.valijas) {
+						bloqueada = filtro.valijas.some(function(rango) {
+							return numero >= rango[0] && numero <= rango[1];
+						});
+					} else {
+						bloqueada = numero >= filtro.valijasDesde && numero <= filtro.valijasHasta;
+					}
+
+					if (bloqueada) {
+						$(this).addClass('bloqueada');
+					}
+				});
+			}
+			function cierrefinal() {
+				home();
 			}
 
-			var video = null;
-			var videofinal = null;
+			var introPaso = 0;
 			$().ready(function() {
-				video = document.getElementById('videoinicio');
-				videofinal = document.getElementById('videofinal');
 				$('#logojuego').click(reiniciar);
 				$('.valija').click(async function() {
+					if ($(this).hasClass('bloqueada')) {
+						return;
+					}
 					$('.fondoazul').fadeIn();
 					$(this).addClass('centro');
 					const indice = $(this).attr('src').replace(/\D/g, '')						
@@ -313,16 +102,30 @@
 						},2500);
 					}
 				});
-				$('#final,#final2').click(home);
-				$('#home').click(function() {
+				$('#comenzar').click(function() {
+					if (introPaso == 0) {
+						introPaso = 1;
+						$('#introimg').fadeOut(function() {
+							$(this).attr('src', 'img/tienen.png').fadeIn();
+						});
+						$(this).text('SIGUIENTE');
+						return;
+					}
+					$('#categoria').show();
+					$('#home').fadeOut();
+				});
+				$('.categoria-boton').click(function() {
+					aplicarCategoria($(this).data('categoria'));
 					reiniciar();
 				});
 			});
 			function home() {
-				video.currentTime = 0;
-				$('#home').fadeIn(function() {
-					video.play();
-				});	
+				$('#home').fadeIn();
+				introPaso = 0;
+				$('#introimg').attr('src', 'img/tinedita.png').show();
+				$('#comenzar').text('COMENZAR');
+				$('#categoria').hide();
+				limpiarCategoria();
 			}
 			function setup() {
 				console.log("pywebview listo");
@@ -350,29 +153,29 @@
 					<p>TOCÁ LA VALIJA QUE MÁS TE GUSTE...<br/>¡Y QUE CAIGA LA SUERTE!</p>
 					<div id="estantes">
 						<img class="valija" id="val01" src="img/val01.png" />
-						<img class="valija" id="val02" src="img/val02.png" />
-						<img class="valija" id="val03" src="img/val03.png" />
-						<img class="valija" id="val04" src="img/val04.png" />
-						<img class="valija" id="val05" src="img/val05.png" />
-						<img class="valija" id="val06" src="img/val06.png" />
-						<img class="valija" id="val07" src="img/val07.png" />
-						<img class="valija" id="val08" src="img/val08.png" />
-						<img class="valija" id="val09" src="img/val09.png" />
-						<img class="valija" id="val10" src="img/val10.png" />
-						<img class="valija" id="val11" src="img/val11.png" />
-						<img class="valija" id="val12" src="img/val12.png" />
-						<img class="valija" id="val13" src="img/val13.png" />
-						<img class="valija" id="val14" src="img/val14.png" />
-						<img class="valija" id="val15" src="img/val15.png" />
-						<img class="valija" id="val16" src="img/val16.png" />
-						<img class="valija" id="val17" src="img/val17.png" />
-						<img class="valija" id="val18" src="img/val18.png" />
-						<img class="valija" id="val19" src="img/val19.png" />
-						<img class="valija" id="val20" src="img/val20.png" />
-						<img class="valija" id="val21" src="img/val21.png" />
-						<img class="valija" id="val22" src="img/val22.png" />
-						<img class="valija" id="val23" src="img/val23.png" />
-						<img class="valija" id="val24" src="img/val24.png" />
+						<img class="valija" id="val02" src="img/val01.png" />
+						<img class="valija" id="val03" src="img/val01.png" />
+						<img class="valija" id="val04" src="img/val01.png" />
+						<img class="valija" id="val05" src="img/val01.png" />
+						<img class="valija" id="val06" src="img/val01.png" />
+						<img class="valija" id="val07" src="img/val01.png" />
+						<img class="valija" id="val08" src="img/val01.png" />
+						<img class="valija" id="val09" src="img/val02.png" />
+						<img class="valija" id="val10" src="img/val02.png" />
+						<img class="valija" id="val11" src="img/val02.png" />
+						<img class="valija" id="val12" src="img/val02.png" />
+						<img class="valija" id="val13" src="img/val02.png" />
+						<img class="valija" id="val14" src="img/val02.png" />
+						<img class="valija" id="val15" src="img/val02.png" />
+						<img class="valija" id="val16" src="img/val02.png" />
+						<img class="valija" id="val17" src="img/val03.png" />
+						<img class="valija" id="val18" src="img/val03.png" />
+						<img class="valija" id="val19" src="img/val03.png" />
+						<img class="valija" id="val20" src="img/val03.png" />
+						<img class="valija" id="val21" src="img/val03.png" />
+						<img class="valija" id="val22" src="img/val03.png" />
+						<img class="valija" id="val23" src="img/val03.png" />
+						<img class="valija" id="val24" src="img/val03.png" />
 
 						<div class="estante" id="est01" />
 							<span>1</span>
@@ -414,34 +217,33 @@
 				</div>
 				<div class="fondoazul"></div>
 			</div>
-			<div id="final" class="pantalla">
+			<div id="home" class="pantalla">
 				<div>
-					<img id="logofinal" src="img/logo.png" />
-					<div id="burbujacont">
-						<div id="burbuja">¡GENIAL! RETIRÁ TU VALIJA<br/> DEL CONTENEDOR...</div>
+					<img class="logohome" src="img/logo.png" />
+					<div id="homevisual">
+						<img id="introimg" src="img/tinedita.png" />
+						<video class="mayonesin" autoplay muted loop playsinline>
+							<source src="img/inicio.mp4" type="video/mp4">
+						</video>
 					</div>
-					<img id="finalimg" src="img/final.png" />
-					<p>¡Etiquetanos con tu premio! @HellmannsArg</p>
+					<button id="comenzar" type="button">COMENZAR</button>
 				</div>
 			</div>
-			<div id="finalok" class="pantalla megavideo">
-				<video id="videofinal" autoplay muted playsinline>
-					<source src="img/final.mp4" type="video/mp4">
-				</video>
-			</div>
-			<div id="home" class="pantalla megavideo">
-				<video id="videoinicio" autoplay muted loop playsinline>
-					<source src="img/inicio.mp4" type="video/mp4">
-				</video>
-				<!--
+			<div id="categoria" class="pantalla">
 				<div>
-					<img id="logojuego" src="img/logo.png" />
-					<video id="video" autoplay muted loop playsinline>
-						<source src="img/home.mp4" type="video/mp4">
-					</video>
-					<p>Home</p>
+					<img class="logohome" src="img/logo.png" />
+					<div id="categoriavisual">
+						<img id="categoriaimg" src="img/categoria.png" />
+						<video class="mayonesin" autoplay muted loop playsinline>
+							<source src="img/categoria.mp4" type="video/mp4">
+						</video>
+					</div>
+					<div id="botonescategoria">
+						<button class="categoria-boton oro" type="button" data-categoria="oro">ORO: <span>300 PUNTOS</span></button>
+						<button class="categoria-boton plata" type="button" data-categoria="plata">PLATA: <span>200 PUNTOS</span></button>
+						<button class="categoria-boton bronce" type="button" data-categoria="bronce">BRONCE: <span>100 PUNTOS</span></button>
+					</div>
 				</div>
-				-->
 			</div>
 		</div>
 	</body>
