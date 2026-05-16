@@ -83,20 +83,72 @@
 			}
 
 			var introPaso = 0;
+			var debugActivo = false;
+			var debugTaps = 0;
+			var debugTapTimer = null;
+
+			function mostrarDebug(data) {
+				if (!debugActivo) {
+					return;
+				}
+
+				if (typeof data === 'string') {
+					$('#debugserial').text(data);
+					return;
+				}
+
+				const partes = [
+					'DEBUG SERIAL',
+					'indice=' + (data.indice ?? '-'),
+					'puerto=' + (data.port ?? ('ser[' + (data.ser_index ?? '-') + ']')),
+					'pos=' + (data.pos ?? '-'),
+					'envio=' + (data.cmd_raw ?? data.cmd ?? '-')
+				];
+
+				if (data.response) {
+					partes.push('respuesta=' + data.response);
+				}
+
+				if (data.error) {
+					partes.push('error=' + data.error);
+				}
+
+				$('#debugserial').text(partes.join(' | '));
+			}
+
+			function activarDebugPorLogo() {
+				debugTaps += 1;
+				clearTimeout(debugTapTimer);
+				debugTapTimer = setTimeout(function() {
+					debugTaps = 0;
+				}, 1600);
+
+				if (debugTaps >= 5) {
+					debugActivo = !debugActivo;
+					debugTaps = 0;
+					$('#debugserial').toggle(debugActivo);
+					mostrarDebug(debugActivo ? 'DEBUG SERIAL | esperando seleccion...' : '');
+				}
+			}
 			$().ready(function() {
 				$('#logojuego').click(reiniciar);
+				$('#home .logohome').click(activarDebugPorLogo);
 				$('.valija').click(async function() {
 					if ($(this).hasClass('bloqueada')) {
 						return;
 					}
 					$('.fondoazul').fadeIn();
 					$(this).addClass('centro');
-					const indice = $(this).attr('src').replace(/\D/g, '')						
+					//const indice = $(this).attr('src').replace(/\D/g, '')
+					const indice = $(this).attr('ind');						
+					mostrarDebug({ indice: indice, cmd: 'enviando...' });
 					if (window.pywebview && window.pywebview.api) {
 						const result = await window.pywebview.api.enviar(indice);
+						mostrarDebug(result);
 						cierrefinal(result)
 					} else {
 						console.log("pywebview no disponible, simulo envío:", indice);
+						mostrarDebug({ indice: indice, cmd: 'SIMULADO' });
 						setTimeout(function() {
 							cierrefinal("OK")
 						},2500);
@@ -147,35 +199,36 @@
 	</head>
 	<body>
 		<div id="marco">
+			<div id="debugserial"></div>
 			<div id="juego" class="pantalla">
 				<div>
 					<img id="logojuego" src="img/logo.png" />
 					<p>TOCÁ LA VALIJA QUE MÁS TE GUSTE...<br/>¡Y QUE CAIGA LA SUERTE!</p>
 					<div id="estantes">
-						<img class="valija" id="val01" src="img/val01.png" />
-						<img class="valija" id="val02" src="img/val01.png" />
-						<img class="valija" id="val03" src="img/val01.png" />
-						<img class="valija" id="val04" src="img/val01.png" />
-						<img class="valija" id="val05" src="img/val01.png" />
-						<img class="valija" id="val06" src="img/val01.png" />
-						<img class="valija" id="val07" src="img/val01.png" />
-						<img class="valija" id="val08" src="img/val01.png" />
-						<img class="valija" id="val09" src="img/val02.png" />
-						<img class="valija" id="val10" src="img/val02.png" />
-						<img class="valija" id="val11" src="img/val02.png" />
-						<img class="valija" id="val12" src="img/val02.png" />
-						<img class="valija" id="val13" src="img/val02.png" />
-						<img class="valija" id="val14" src="img/val02.png" />
-						<img class="valija" id="val15" src="img/val02.png" />
-						<img class="valija" id="val16" src="img/val02.png" />
-						<img class="valija" id="val17" src="img/val03.png" />
-						<img class="valija" id="val18" src="img/val03.png" />
-						<img class="valija" id="val19" src="img/val03.png" />
-						<img class="valija" id="val20" src="img/val03.png" />
-						<img class="valija" id="val21" src="img/val03.png" />
-						<img class="valija" id="val22" src="img/val03.png" />
-						<img class="valija" id="val23" src="img/val03.png" />
-						<img class="valija" id="val24" src="img/val03.png" />
+						<img class="valija" ind="1" id="val01" src="img/val01.png" />
+						<img class="valija" ind="2" id="val02" src="img/val01.png" />
+						<img class="valija" ind="3" id="val03" src="img/val01.png" />
+						<img class="valija" ind="4" id="val04" src="img/val01.png" />
+						<img class="valija" ind="5" id="val05" src="img/val01.png" />
+						<img class="valija" ind="6" id="val06" src="img/val01.png" />
+						<img class="valija" ind="7" id="val07" src="img/val01.png" />
+						<img class="valija" ind="8" id="val08" src="img/val01.png" />
+						<img class="valija" ind="9" id="val09" src="img/val02.png" />
+						<img class="valija" ind="10" id="val10" src="img/val02.png" />
+						<img class="valija" ind="11" id="val11" src="img/val02.png" />
+						<img class="valija" ind="12" id="val12" src="img/val02.png" />
+						<img class="valija" ind="13" id="val13" src="img/val02.png" />
+						<img class="valija" ind="14" id="val14" src="img/val02.png" />
+						<img class="valija" ind="15" id="val15" src="img/val02.png" />
+						<img class="valija" ind="16" id="val16" src="img/val02.png" />
+						<img class="valija" ind="17" id="val17" src="img/val03.png" />
+						<img class="valija" ind="18" id="val18" src="img/val03.png" />
+						<img class="valija" ind="19" id="val19" src="img/val03.png" />
+						<img class="valija" ind="20" id="val20" src="img/val03.png" />
+						<img class="valija" ind="21" id="val21" src="img/val03.png" />
+						<img class="valija" ind="22" id="val22" src="img/val03.png" />
+						<img class="valija" ind="23" id="val23" src="img/val03.png" />
+						<img class="valija" ind="24" id="val24" src="img/val03.png" />
 
 						<div class="estante" id="est01" />
 							<span>1</span>

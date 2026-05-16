@@ -21,6 +21,21 @@
 	width: 100vw;
 	overflow:hidden;
 }
+#debugserial {
+	display:none;
+	position:absolute;
+	top:0;
+	left:0;
+	width:100%;
+	box-sizing:border-box;
+	z-index:100;
+	background:#000;
+	color:#fff;
+	font:1.4vh/1.4 Consolas, monospace;
+	padding:1vh 1.2vh;
+	white-space:normal;
+	word-break:break-word;
+}
 @media (orientation: landscape) {
 	#marco {
 		margin:auto;
@@ -242,6 +257,8 @@
 	max-height:32vh;
 	object-fit:contain;
 	z-index:2;
+	-webkit-mask-image: radial-gradient(ellipse at center, #000 45%, rgba(0,0,0,0.75) 62%, rgba(0,0,0,0) 100%);
+	mask-image: radial-gradient(ellipse at center, #000 45%, rgba(0,0,0,0.75) 62%, rgba(0,0,0,0) 100%);
 }
 #botonescategoria {
 	width:100%;
